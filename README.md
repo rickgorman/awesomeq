@@ -22,6 +22,8 @@ A fast in-memory message processing queue hosted by [express.js](http://expressj
 1. [API](#api)
 1. [Monitoring](#monitoring)
 1. [Current Bottlenecks and Thoughts on Future Scaling](#current-bottlenecks-and-thoughts-on-future-scaling)
+1. [TODO](#todo)
+1. [License](#license)
 
 ## Quick Start
 
@@ -205,7 +207,7 @@ Use the CLI tool to monitor the status of all topics:
 
 [insert giphy here]
 
-## Current Bottlenecks and Future Scaling Efforts
+## Current Bottlenecks and Thoughts on Future Scaling
 
 * How to meet high-volume requests
   * Where it would fail
