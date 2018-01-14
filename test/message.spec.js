@@ -57,7 +57,6 @@ describe('Message', () => {
   });
 
   describe('#isUnprocessable()', () => {
-
     context('with a message that CAN be processed again', () => {
       const message = new Message('its not dead');
       it('returns true', () => {
