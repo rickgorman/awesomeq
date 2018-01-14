@@ -7,7 +7,7 @@
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "mocha --require babel-core/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w ./test/*.spec.js"
+    "test:watch": "mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec ./test/*.spec.js"
   },
   "author": "",
   "license": "ISC",
