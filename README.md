@@ -21,6 +21,7 @@ A fast in-memory message processing queue hosted by [express.js](http://expressj
 1. [Overview](#overview)
 1. [API](#api)
 1. [Monitoring](#monitoring)
+1. [Testing](#testing)
 1. [Current Bottlenecks and Thoughts on Future Scaling](#current-bottlenecks-and-thoughts-on-future-scaling)
 1. [TODO](#todo)
 1. [License](#license)
@@ -201,11 +202,19 @@ If the queue does not hear back from the consumer after a specified delay, the m
   * **On failure:**
     * `404` Message is no longer in the queue. Consumers with delays longer than `processTimeout` may encounter this status code.
 
+## Testing
+
+AwesomeQ includes a test suite built with [mocha](https://mochajs.org/) and configured to run with ES6.
+
+To run the test suite, open a console and enter:
+
+`# npm run test`
+
 ## Monitoring
 
 Use the CLI tool to monitor the status of all topics:
 
-`npm run monitor`
+`# npm run monitor`
 
 [insert giphy here]
 
