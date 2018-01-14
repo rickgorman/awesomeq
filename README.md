@@ -116,6 +116,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
             singleFailures: 1,
             multipleFailures: 0,
             unprocessableMessages: 0,
+            averageProcessingTimeMS: 23,
             createdAt: "2018-01-13T03:24:00.000Z",
             processTimeout: 60000,
           },
@@ -144,17 +145,24 @@ If the queue does not hear back from the consumer after a specified delay, the m
         data: [
           {
             id: 0,
-            content: "foo",
+            body: "foo",
             createdAt: "2018-01-13T03:25:00.000Z",
             processAttempts: 0,
           },
           {
             id: 1,
-            content: "bar",
+            body: "bar",
             createdAt: "2018-01-13T03:26:00.000Z",
             processAttempts: 2,
           },
-        ]
+        ],
+        relationships: {
+          topic: {
+            data: {
+              id: 1
+            }
+          }
+        }
       }
       ```
     * `204` There are no messages in the given topic.
@@ -162,27 +170,33 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * When a consumer checks out a message and does not mark it successful before `processTimeout` elapses, that message will be added back to the front of the queue for immediate reprocessing.
 * `POST /:topic` - Add a message to the given topic:
   * **Parameters:**
-    * `messageBody` - A string representing the content of the message.
+    * `messageBody` - A string representing the body of the message.
   * **On success:**
     * `200` Returns a reference to the newly-created message:
       ```javascript
       {
         data: [{
           id: 0,
-          topicId: 0,
-          content: "foo",
+          body: "foo",
           createdAt: "2018-01-13T03:25:00.000Z",
           processAttempts: 0,
-        }]
+        }],
+        relationships: {
+          topic: {
+            data: {
+              id: 1
+            }
+          }
+        }
       }
       ```
   * **On failure:**
-    * `422` Invalid content (likely too long):
+    * `422` Invalid body (likely too long):
       ```javascript
       {
         errors: [{
-          title: "Invalid content",
-          detail: "Content string exceeds maximum length (xyz bytes)"
+          title: "Invalid body",
+          detail: "Body string exceeds maximum length (xyz bytes)"
         }]
       }
       ```
@@ -197,8 +211,15 @@ If the queue does not hear back from the consumer after a specified delay, the m
           createdAt: "2018-01-13T03:25:00.000Z",
           processingBeganAt: "2018-01-13T03:27:00.000Z",
           processingCompletedAt: "2018-01-13T03:27:05.000Z",
-          processDurationMS: 5000,
-        }]
+          processDurationMS: 5000
+        }],
+        relationships: {
+          topic: {
+            data: {
+              id: 1
+            }
+          }
+        }
       }
       ```
   * **On failure:**
@@ -243,6 +264,7 @@ Use the CLI tool to monitor the status of all topics:
   * deleteQueue
   * purgeQueue
   * sendMessageBatch
+* Do not trust the client's reporting of `Message.processCounter`
 * Mock secondary classes in test suite
 
 ## License
