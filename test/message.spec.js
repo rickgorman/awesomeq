@@ -80,7 +80,6 @@ describe('Message', () => {
       message.processCounter = MAX_PROCESS_ATTEMPTS + 1;
 
       it('should be false', () => {
-        debugger
         assert.ok(!message.hasFailedAndCanBeReprocessed());
       });
     });
