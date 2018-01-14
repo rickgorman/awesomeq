@@ -25,7 +25,7 @@ describe('Queue', () => {
 
         q.enqueue(second);
         assert.equal(2, q.length);
-        assert.equal(second, q._peek());
+        assert.equal(second, q._peekRear());
 
         q.dequeue();
         assert.equal(first, q._peek());
