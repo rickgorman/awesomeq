@@ -241,6 +241,7 @@ Use the CLI tool to monitor the status of all topics:
   * deleteQueue
   * purgeQueue
   * sendMessageBatch
+* Mock secondary classes in test suite
 
 ## License
 
