@@ -158,6 +158,8 @@ If the queue does not hear back from the consumer after a specified delay, the m
       }
       ```
     * `204` There are no messages in the given topic.
+  * **Implementation Details**
+    * When a consumer checks out a message and does not mark it successful before `processTimeout` elapses, that message will be added back to the front of the queue for immediate reprocessing.
 * `POST /:topic` - Add a message to the given topic:
   * **Parameters:**
     * `messageBody` - A string representing the content of the message.
