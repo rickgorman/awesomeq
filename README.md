@@ -137,25 +137,17 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * `singleFailures` - messages that took **2 attempts** to successfully process
     * `multipleFailures` - messages that took **more than 2 attempts** to successfully process
     * `unprocessableMessages` - messages that failed processing after **5 attempts**
-* `GET /:topic/receiveMessage?quantity=[1-10]` - Retrieve one or more messages up to max(quantity, queueLength) from the specified queue where quantity is at most 10. If unspecified, `quantity` will default to `1`.
+* `GET /:topic/receiveMessage` - Retrieve one message from the specified queue.
   * **On success:**
-    * `200` Returns an array of messages:
+    * `200` Returns a JSONAPI representation of a message:
       ```javascript
       {
-        data: [
-          {
-            id: 0,
-            body: "foo",
-            createdAt: "2018-01-13T03:25:00.000Z",
-            processAttempts: 0,
-          },
-          {
-            id: 1,
-            body: "bar",
-            createdAt: "2018-01-13T03:26:00.000Z",
-            processAttempts: 2,
-          },
-        ],
+        data: [{
+          id: 0,
+          body: "foo",
+          createdAt: "2018-01-13T03:25:00.000Z",
+          processAttempts: 0,
+        }],
         relationships: {
           topic: {
             data: {
@@ -165,7 +157,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
         }
       }
       ```
-    * `204` There are no messages in the given topic.
+    * `204` There are no messages available in the given topic.
   * **Implementation Details**
     * When a consumer checks out a message and does not mark it successful before `processTimeout` elapses, that message will be added back to the front of the queue for immediate reprocessing.
 * `POST /:topic` - Add a message to the given topic:
@@ -264,6 +256,7 @@ Use the CLI tool to monitor the status of all topics:
   * deleteQueue
   * purgeQueue
   * sendMessageBatch
+  * receiveMessageBatch
 * Do not trust the client's reporting of `Message.processCounter`
 * Mock secondary classes in test suite
 
