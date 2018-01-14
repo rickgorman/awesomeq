@@ -29,6 +29,11 @@ describe('Message', () => {
         const now = new Date();
         assert.ok(message.createdAt - now < 10000);
       });
+
+      it('should generate a unique id number', () => {
+        const message2 = new Message(body);
+        assert.notEqual(message.id, message2.id);
+      });
     });
   });
 
