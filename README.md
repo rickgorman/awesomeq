@@ -259,6 +259,7 @@ Use the CLI tool to monitor the status of all topics:
   * receiveMessageBatch
 * Do not trust the client's reporting of `Message.processCounter`
 * Mock secondary classes in test suite
+* Add custom Error classes
 
 ## License
 
