@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 import Message from '../lib/message';
+import { MAX_PROCESS_ATTEMPTS } from '../lib/message';
 
 describe('Message', () => {
   describe('#constructor()', () => {
@@ -52,6 +53,35 @@ describe('Message', () => {
 
       it('returns false', () => {
         assert.ok(!message.isFresh());
+      });
+    });
+  });
+
+  describe('#hasFailedAndCanBeReprocessed', () => {
+    context('with a message with 0 process attempts', () => {
+      const message = new Message('fresh');
+      it('should be false', () => {
+        assert.ok(!message.hasFailedAndCanBeReprocessed());
+      });
+    });
+
+    context('with a message with a few process attempts', () => {
+      const message = new Message('fresh');
+      message._incrementProcessCount();
+      message._incrementProcessCount();
+
+      it('should be true', () => {
+        assert.ok(message.hasFailedAndCanBeReprocessed());
+      });
+    });
+
+    context('with a message with more than MAX_PROCESS_ATTEMPTS attempts', () => {
+      const message = new Message('fresh');
+      message.processCounter = MAX_PROCESS_ATTEMPTS + 1;
+
+      it('should be false', () => {
+        debugger
+        assert.ok(!message.hasFailedAndCanBeReprocessed());
       });
     });
   });
