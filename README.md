@@ -158,6 +158,8 @@ If the queue does not hear back from the consumer after a specified delay, the m
       ```
     * `204` There are no messages in the given topic.
 * `POST /:topic` - Add a message to the given topic:
+  * **Parameters:**
+    * `messageBody` - A string representing the content of the message.
   * **On success:**
     * `200` Returns a reference to the newly-created message:
       ```javascript
@@ -213,8 +215,11 @@ Use the CLI tool to monitor the status of all topics:
   * Where it would fail
   * What would be replaced
   * What infrastructure / why
-  * What stack / why
-    * Websockets
+    * spin up multiple instances of the node server and use one of the following strategies:
+      * round-robin
+      * load-balancer
+    * additionally, transition from in-memory data store to a fast persistent-storage system like DyanmoDB
+    * Implement websockets infrastructure
       * to reduce HTTP overhead
       * to automate retries by triggering when a client disconnects
 
