@@ -1,8 +1,7 @@
 var assert = require('assert');
-var chai = require('chai');
-var expect = chai.expect;
 
 import Topic from '../lib/topic';
+import Message from '../lib/message';
 
 describe('Topic', () => {
   describe('#constructor()', () => {
@@ -38,7 +37,7 @@ describe('Topic', () => {
       };
 
       it('should throw an error for an empty name', () => {
-        expect(createTopicWithoutParams).to.throw();
+        assert.throws(createTopicWithoutParams, Error);
       });
 
       var topicWithoutTimeout = new Topic(name);
@@ -50,19 +49,24 @@ describe('Topic', () => {
   });
 
   describe('#receiveMessage()', () => {
-    context('when given an as-yet-unseen Message object', () => {
-      it('should add that message to the BACK of the wait queue', () => {
+    var topic = new Topic('whatever');
 
+    context('when given an as-yet-unseen Message object', () => {
+      var message = new Message('foo');
+
+      it('should add that message to the BACK of the wait queue', () => {
+        topic.receiveMessage(message);
+        assert.ok(topic.messagesAwaitingProcessing.includes(message));
       });
     });
 
-    context('when given a message that has failed processing between 1-4 times', () => {
+    context('when given a message that has already been tested AND can be retried', () => {
       it('should add that message to the FRONT of the wait queue', () => {
 
       });
     });
 
-    context('when given a message that has failed processing 5+ times', () => {
+    context('when given a message that can no longer be retried', () => {
       it('should add that message to the unprocessableMessages array', () => {
 
       });
