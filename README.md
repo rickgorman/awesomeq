@@ -229,7 +229,9 @@ Use the CLI tool to monitor the status of all topics:
     * spin up multiple instances of the node server and use one of the following strategies:
       * round-robin
       * load-balancer
-    * additionally, transition from in-memory data store to a fast persistent-storage system like DyanmoDB
+    * additionally:
+      * transition from in-memory data store to a fast persistent-storage system like DyanmoDB
+      * replace increment-by-one ids with GUIDs
     * Implement websockets infrastructure
       * to reduce HTTP overhead
       * to automate retries by triggering when a client disconnects
