@@ -62,13 +62,13 @@ describe('Topic', () => {
 
     context('when given a message that has already been tested AND can be retried', () => {
       it('should add that message to the FRONT of the wait queue', () => {
-
+        assert.ok(false, 'UNIMPLEMENTED');
       });
     });
 
     context('when given a message that can no longer be retried', () => {
       it('should add that message to the unprocessableMessages array', () => {
-
+        assert.ok(false, 'UNIMPLEMENTED');
       });
     });
   });
