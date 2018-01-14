@@ -25,10 +25,13 @@ describe('Queue', () => {
 
         q.enqueue(second);
         assert.equal(2, q.length);
+        assert.equal(second, q._peek());
+
+        q.dequeue();
         assert.equal(first, q._peek());
 
         q.dequeue();
-        assert.equal(second, q._peek());
+        assert.equal(0, q.length);
       });
     });
 
@@ -67,17 +70,18 @@ describe('Queue', () => {
 
       it('should throw an error', () => {
         assert.throws(dequeueAnEmptyQueue, Error);
-      })
-    })
+      });
+    });
   });
 
   describe('#enqueueToFront()', () => {
-    context('when the message does not exist in the queue', () => {
+    context('when the message DOES NOT exist in the queue', () => {
       const q = new Queue();
       const one = new Message('one');
       const two = new Message('two');
       q.enqueue(one);
       it('should add the given message to the front of the queue', () => {
+        assert.equal(one, q._peek());
         q.enqueueToFront(two);
         assert.equal(two, q._peek());
       });
