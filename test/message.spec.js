@@ -23,6 +23,12 @@ describe('Message', () => {
       it('should initialize the process counter', () => {
         assert.equal(0, message.processCounter);
       });
+
+      it('should have a createdAt timestamp', () => {
+        // this tests that the timestamp was created in the last 10 seconds
+        const now = new Date();
+        assert.ok(message.createdAt - now < 10000);
+      });
     });
   });
 
