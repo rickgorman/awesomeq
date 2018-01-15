@@ -117,13 +117,13 @@ If the queue does not hear back from the consumer after a specified delay, the m
           name: "Topic Name",
           attributes: {
             messagesInQueue: 14,
-            messagesProcessed: 37,
             messagesBeingProcessed: 3,
             createdAt: "2018-01-13T03:24:00.000Z",
             processTimeout: 60000,
             statistics: {
               singleFailures: 1,
               multipleFailures: 0,
+              messagesProcessed: 37,
               unprocessableMessages: 0,
               averageProcessingTimeMS: 23,              
             }
@@ -137,7 +137,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
       {
         errors: [{
           title: "Non-existing topic",
-          detail: "name-of-the-topic"
+          detail: "{id}"
         }]
       }
       ```
@@ -270,6 +270,7 @@ Use the CLI tool to monitor the status of all topics:
 * Do not trust the client's reporting of `Message.processCounter`
 * Mock secondary classes in test suite
 * Add custom Error classes
+* Sanitize all incoming params (including wildcards) with a middleware
 
 ## License
 
