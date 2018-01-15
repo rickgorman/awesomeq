@@ -10,13 +10,15 @@
     "test:watch": "export NODE_ENV=test && mocha --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
     "test:watch:debug": "export NODE_ENV=test && mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
     "server": "export NODE_ENV=dev && node dist/awesomeq.js",
-    "monitor": "node lib/util/monitor.js"
+    "monitor": "node lib/util/monitor.js",
+    "client-publisher": "node lib/util/client-publisher.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "faker": "^4.1.0",
     "morgan": "^1.9.0",
     "prettyjson": "^1.2.1",
     "request": "^2.83.0"
