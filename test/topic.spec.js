@@ -164,41 +164,41 @@ describe('Topic', () => {
       });
     });
 
-    // context('when given a message that processed after a single failure', () => {
-    //   const topic = new Topic('whatever');
-    //   const messageBody = 'foo';
-    //   const message = topic.sendMessage(messageBody);
-    //
-    //   topic.receiveMessage();
-    //   topic.requeueMessage(message.id);
-    //   topic.receiveMessage();
-    //
-    //   topic.acknowledgeCompletion(message.id);
-    //
-    //   it('should adjust statistics accordingly', () => {
-    //     assert.equal(1, topic.statistics.messagesProcessed);
-    //     assert.equal(1, topic.statistics.singleFailures);
-    //   });
-    // });
+    context('when given a message that processed after a single failure', () => {
+      const topic = new Topic('whatever');
+      const messageBody = 'foo';
+      const message = topic.sendMessage(messageBody);
 
-    // context('when given a message that processed after multiple failures', () => {
-    //   const topic = new Topic('whatever');
-    //   const messageBody = 'foo';
-    //   const message = topic.sendMessage(messageBody);
-    //
-    //   topic.receiveMessage();
-    //   topic.requeueMessage(message.id);
-    //   topic.receiveMessage();
-    //   topic.requeueMessage(message.id);
-    //   topic.receiveMessage();
-    //
-    //   topic.acknowledgeCompletion(message.id);
-    //
-    //   it('should adjust statistics accordingly', () => {
-    //     assert.equal(1, topic.statistics.messagesProcessed);
-    //     assert.equal(1, topic.statistics.multipleFailures);
-    //   });
-    // });
+      topic.receiveMessage();
+      topic.requeueMessage(message.id);
+      topic.receiveMessage();
+
+      topic.acknowledgeCompletion(message.id);
+
+      it('should adjust statistics accordingly', () => {
+        assert.equal(1, topic.statistics.messagesProcessed);
+        assert.equal(1, topic.statistics.singleFailures);
+      });
+    });
+
+    context('when given a message that processed after multiple failures', () => {
+      const topic = new Topic('whatever');
+      const messageBody = 'foo';
+      const message = topic.sendMessage(messageBody);
+
+      topic.receiveMessage();
+      topic.requeueMessage(message.id);
+      topic.receiveMessage();
+      topic.requeueMessage(message.id);
+      topic.receiveMessage();
+
+      topic.acknowledgeCompletion(message.id);
+
+      it('should adjust statistics accordingly', () => {
+        assert.equal(1, topic.statistics.messagesProcessed);
+        assert.equal(1, topic.statistics.multipleFailures);
+      });
+    });
   });
 
   describe('#requeueMessage()', () => {
