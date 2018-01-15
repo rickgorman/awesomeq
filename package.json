@@ -9,7 +9,8 @@
     "test": "export NODE_ENV=test && mocha --require babel-core/register --colors --recursive ./test/**/*.spec.js",
     "test:watch": "export NODE_ENV=test && mocha --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
     "test:watch:debug": "export NODE_ENV=test && mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
-    "server": "export NODE_ENV=dev && node dist/awesomeq.js"
+    "server": "export NODE_ENV=dev && node dist/awesomeq.js",
+    "monitor": "node lib/util/monitor.js"
   },
   "author": "",
   "license": "ISC",
