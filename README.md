@@ -272,6 +272,7 @@ Use the CLI tool to monitor the status of all topics:
 * Add custom Error classes
 * Sanitize all incoming params (including wildcards) with a middleware
 * Limit length of message bodies
+* Move remainder of the JSON generation into models (better yet, into JSON views)
 
 ## License
 
