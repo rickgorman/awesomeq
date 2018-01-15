@@ -16,6 +16,11 @@ A fast in-memory message processing queue hosted by [express.js](http://expressj
 * Handles MIA clients via a configurable retry timeout
 * Push/Pop operations are always O(1)
 
+## Note to Some WONDERFUL Readers
+One spec of this project was overlooked: it should be based on a database whos logic is abstracted away. When this mistake was realized, there was not enough time left to refactor given the size of the test suite that would need to be rewritten.
+
+Instead, see [some notes](#current-bottlenecks-and-thoughts-on-future-scaling) on how this can be refactored in under a day.
+
 ## Contents
 1. [Quick Start](#quick-start)
 1. [Overview](#overview)
@@ -219,7 +224,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
       ```
   * **On failure:**
     * `404` Message is no longer in the queue. Consumers with delays longer than `processTimeout` may encounter this status code.
-* `GET /monitor` - Receive detailed status information for all topics. 
+* `GET /monitor` - Receive detailed status information for all topics.
 ## Testing
 
 AwesomeQ includes a test suite built with [mocha](https://mochajs.org/) and configured to run with ES6.
@@ -242,11 +247,11 @@ Use the CLI tool to monitor the status of all topics:
     * Eventually this single instance of node will become overwhelmed by the number of requests coming in per second. It will not be able to keep up with the HTTP request queue and will eventually run out of RAM and/or CPU.
   * What would be replaced
     * **Summary**
-      * The in-memory O(1) queue will need to be replaced by a persistent O(log n) data store.
+      * The in-memory O(1) queue will need to be replaced by a persistent O(log n) data store. To do so, a significant amount of code will need to be refactored. Specifically, the `queue`, `message` and `topic` models can be rewritten using noSQL column stores. The reason for this is that since we will be moving to multiple concurrent instances of the node server, data must be stored centrally. It's also good practice in case a node instance dies.
       * The single-instance node server will need to be replaced by a more scalable HTTP handler.
     * **Server-side**
       * [AWS Lambda](https://aws.amazon.com/lambda/). It has unlimited automatic scaling and pricing is very cost effective. The monthly fee for 1k requests per second with a memory footprint of 32MB/request is around $1900/mo.
-      * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. With proper indexing, reads and writes will complete in O(log n) time. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
+      * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. With proper indexing, reads and writes will complete in O(log n) time. We can go further with [AWS DAX](https://aws.amazon.com/dynamodb/dax/) to make things even quicker. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
       * This gives us a pricing estimate of $2000/mo. Similar AWS SQS pricing for 1k requests per second runs $1200/mo so we're well within a factor of 2 of an optimized AWS service offering. By bringing down the memory footprint of our node module, we may be able to reach SQS pricing parity.
     * **Client-side**
       * Implement websockets capability for clients. This has a couple of immediate benefits:
