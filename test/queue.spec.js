@@ -1,7 +1,7 @@
 var assert = require('assert');
 
-import Queue from '../lib/queue';
-import Message from '../lib/message';
+import Queue from '../lib/models/queue';
+import Message from '../lib/models/message';
 
 describe('Queue', () => {
   describe('#constructor()', () => {
