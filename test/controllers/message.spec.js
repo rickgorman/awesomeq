@@ -73,4 +73,45 @@ describe('MessageController', () => {
       });
     });
   });
+
+  describe('DELETE /topics/:topicId/:messageId', () => {
+    context('with a valid message id (still in the processing queue)', () => {
+      it('should remove the message and return details', (done) => {
+        const topic = global.db.getTopic('awesome');
+        const topicId = topic.id;
+        const message = topic.sendMessage('ok');
+        topic.receiveMessage();
+        const messageId = message.id;
+
+        chai.request(server)
+          .delete(`/topics/${topicId}/${messageId}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            should.exist(res.body);
+            should.exist(res.body.data);
+            res.body.data.should.be.a('array');
+            res.body.data.length.should.be.eql(1);
+            res.body.data[0].processAttempts.should.eql(1);
+
+            should.exist(res.body.relationships);
+            res.body.relationships.topic.data.id.should.be.eql(topicId);
+            done();
+          });
+
+      });
+    });
+
+    context('with an invalid message id', () => {
+      it('should return a 404', (done) => {
+        const topic = global.db.getTopic('awesome').id;
+
+        chai.request(server)
+          .delete(`/topics/${topic.id}/${9999}`)
+          .end((err, res) => {
+            res.should.have.status(404);
+            done();
+          });
+      });
+    });
+  });
 });
