@@ -245,12 +245,13 @@ Use the CLI tool to monitor the status of all topics:
       * The single-instance node server will need to be replaced by a more scalable HTTP handler.
     * **Server-side**
       * [AWS Lambda](https://aws.amazon.com/lambda/). It has unlimited automatic scaling and pricing is very cost effective. The monthly fee for 1k requests per second with a memory footprint of 32MB/request is around $1900/mo.
-      * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
+      * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. With proper indexing, reads and writes will complete in O(log n) time. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
       * This gives us a pricing estimate of $2000/mo. Similar AWS SQS pricing for 1k requests per second runs $1200/mo so we're well within a factor of 2 of an optimized AWS service offering. By bringing down the memory footprint of our node module, we may be able to reach SQS pricing parity.
     * **Client-side**
       * Implement websockets capability for clients. This has a couple of immediate benefits:
         * Reduce HTTP overhead for clients that do continuous work.
         * Automate retries by triggering when a client disconnects. For MIA clients this will immediately put their messages back in the ready queue.
+      * Implement `sendMessageBatch` and `receiveMessageBatch` API endpoints. This will reduce the websockets overhead by a magnitude or more, depending on batch size.
 
 ## TODO
 * Implement more API methods:
