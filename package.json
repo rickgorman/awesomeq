@@ -7,14 +7,16 @@
     "build": "webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "mocha --require babel-core/register --colors ./test/*.spec.js",
-    "test:watch"      : "mocha --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
-    "test:watch:debug": "mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec ./test/*.spec.js"
+    "test:watch": "mocha --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
+    "test:watch:debug": "mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
+    "server": "node dist/awesomeq.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.1.2",
     "express": "^4.16.2",
+    "morgan": "^1.9.0",
     "request": "^2.83.0"
   },
   "devDependencies": {
@@ -24,6 +26,9 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-env": "^1.6.1",
-    "mocha": "^4.1.0"
+    "eslint": "^4.15.0",
+    "eslint-loader": "^1.9.0",
+    "mocha": "^4.1.0",
+    "webpack": "^3.10.0"
   }
 }

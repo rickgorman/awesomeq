@@ -8,7 +8,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'library';
+let libraryName = 'awesomeq';
 
 let plugins = [], outputFile;
 
@@ -20,10 +20,10 @@ if (env === 'build') {
 }
 
 const config = {
-  entry: __dirname + '/src/index.js',
+  entry: __dirname + '/lib/server.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '/lib',
+    path: __dirname + '/dist',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
@@ -44,10 +44,11 @@ const config = {
     ]
   },
   resolve: {
-    modules: [path.resolve('./node_modules'), path.resolve('./src')],
+    modules: [path.resolve('./node_modules'), path.resolve('./lib')],
     extensions: ['.json', '.js']
   },
-  plugins: plugins
+  plugins: plugins,
+  target: "node"
 };
 
 module.exports = config;
