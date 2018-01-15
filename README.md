@@ -145,7 +145,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * `singleFailures` - messages that took **2 attempts** to successfully process
     * `multipleFailures` - messages that took **more than 2 attempts** to successfully process
     * `unprocessableMessages` - messages that failed processing after **5 attempts**
-* `GET /topics/:topic/receiveMessage` - Retrieve one message from the specified queue.
+* `GET /topics/:topicId/receiveMessage` - Retrieve one message from the specified queue.
   * **On success:**
     * `200` Returns a JSONAPI representation of a message:
       ```javascript
@@ -168,7 +168,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * `204` There are no messages available in the given topic.
   * **Implementation Details**
     * When a consumer checks out a message and does not mark it successful before `processTimeout` elapses, that message will be added back to the front of the queue for immediate reprocessing.
-* `POST /topics/:topic` - Add a message to the given topic:
+* `POST /topics/:topicId` - Add a message to the given topic:
   * **Parameters:**
     * `messageBody` - A string representing the body of the message.
   * **On success:**
@@ -191,16 +191,16 @@ If the queue does not hear back from the consumer after a specified delay, the m
       }
       ```
   * **On failure:**
-    * `422` Invalid body (likely too long):
+    * `404` Invalid topic:
       ```javascript
       {
         errors: [{
-          title: "Invalid body",
-          detail: "Body string exceeds maximum length (xyz bytes)"
+          title: "Topic does not exist",
+          detail: "{id}"
         }]
       }
       ```
-* `DELETE /topics/:topic/:messageId` - Acknowledge a message as successfully processed and mark it for deletion.
+* `DELETE /topics/:topicId/:messageId` - Acknowledge a message as successfully processed and mark it for deletion.
   * **On success:**
     * `200` Return final processing details of the message:
       ```javascript
@@ -250,7 +250,7 @@ Use the CLI tool to monitor the status of all topics:
       * The in-memory O(1) queue will need to be replaced by a persistent O(log n) data store. To do so, a significant amount of code will need to be refactored. Specifically, the `queue`, `message` and `topic` models can be rewritten using noSQL column stores. The reason for this is that since we will be moving to multiple concurrent instances of the node server, data must be stored centrally. It's also good practice in case a node instance dies.
       * The single-instance node server will need to be replaced by a more scalable HTTP handler.
     * **Server-side**
-      * [AWS Lambda](https://aws.amazon.com/lambda/). It has unlimited automatic scaling and pricing is very cost effective. The monthly fee for 1k requests per second with a memory footprint of 32MB/request is around $1900/mo.
+      * [AWS Lambda](https://aws.amazon.com/lambda/). It has unlimited automatic scaling and pricing is very cost effective. It also supports cronjobs, which suit our sweeper method well. The monthly fee for 1k requests per second with a memory footprint of 32MB/request is around $1900/mo.
       * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. With proper indexing, reads and writes will complete in O(log n) time. We can go further with [AWS DAX](https://aws.amazon.com/dynamodb/dax/) to make things even quicker. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
       * This gives us a pricing estimate of $2000/mo. Similar AWS SQS pricing for 1k requests per second runs $1200/mo so we're well within a factor of 2 of an optimized AWS service offering. By bringing down the memory footprint of our node module, we may be able to reach SQS pricing parity.
     * **Client-side**
@@ -271,6 +271,7 @@ Use the CLI tool to monitor the status of all topics:
 * Mock secondary classes in test suite
 * Add custom Error classes
 * Sanitize all incoming params (including wildcards) with a middleware
+* Limit length of message bodies
 
 ## License
 

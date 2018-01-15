@@ -6,7 +6,7 @@ import server from '../../lib/server';
 
 chai.use(chaiHttp);
 
-describe('Topics', () => {
+describe('TopicController', () => {
   // empty the db before each test
   beforeEach((done) => {
     global.db._topics = {};
