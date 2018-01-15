@@ -4,14 +4,15 @@
   "description": "",
   "main": "lib/server.js",
   "scripts": {
-    "build": "export NODE_ENV=test && webpack --env dev && webpack --env build && npm run test",
+    "build": "webpack --env dev && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "export NODE_ENV=test && mocha --require babel-core/register --colors --recursive ./test/**/*.spec.js",
     "test:watch": "export NODE_ENV=test && mocha --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
     "test:watch:debug": "export NODE_ENV=test && mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec --recursive ./test/**/*.spec.js",
     "server": "export NODE_ENV=dev && node dist/awesomeq.js",
     "monitor": "node lib/util/monitor.js",
-    "client-publisher": "node lib/util/client-publisher.js"
+    "client-publisher": "node lib/util/client-publisher.js",
+    "client-consumer": "node lib/util/client-consumer.js"
   },
   "author": "",
   "license": "ISC",
