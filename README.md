@@ -33,6 +33,7 @@ Requirements: a working [node.js](http://nodejs.org) environment, a console and 
 1. **Install and launch the server:**
     * `git clone https://github.com/rickgorman/awesomeq.git`
     * `npm install`
+    * `npm run build`
     * `npm run server`
 
 1. **Add some messages to the queue.** From a separate console:
@@ -53,7 +54,7 @@ Each queue is referred to as a `topic`, not to be confused with the [Pub/Sub](ht
 If the queue does not hear back from the consumer after a specified delay, the message will then be available to another consumer for processing.
 
 ## API
-* `GET /` - List all available topics by id:
+* `GET /topics` - List all available topics by id:
   ```javascript
   {
     data: [
@@ -68,7 +69,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
     ]
   }
   ```
-* `POST /` - Create a new topic
+* `POST /topics` - Create a new topic
   * **Parameters:**
     * `name` - Desired topic name
     * `processTimeout` - The amount of time (in ms) a consumer is allowed to process a message, after which the message is available to be processed by another consumer (default: 60000).
@@ -101,7 +102,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
           }]
         }
         ```
-* `GET /:topicId` - Receive detailed status information on the specified topic
+* `GET /topics/:topicId` - Receive detailed status information on the specified topic
   * **On success:**
     * `200` Returns details about the given topic:
       ```javascript
@@ -139,7 +140,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * `singleFailures` - messages that took **2 attempts** to successfully process
     * `multipleFailures` - messages that took **more than 2 attempts** to successfully process
     * `unprocessableMessages` - messages that failed processing after **5 attempts**
-* `GET /:topic/receiveMessage` - Retrieve one message from the specified queue.
+* `GET /topics/:topic/receiveMessage` - Retrieve one message from the specified queue.
   * **On success:**
     * `200` Returns a JSONAPI representation of a message:
       ```javascript
@@ -162,7 +163,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
     * `204` There are no messages available in the given topic.
   * **Implementation Details**
     * When a consumer checks out a message and does not mark it successful before `processTimeout` elapses, that message will be added back to the front of the queue for immediate reprocessing.
-* `POST /:topic` - Add a message to the given topic:
+* `POST /topics/:topic` - Add a message to the given topic:
   * **Parameters:**
     * `messageBody` - A string representing the body of the message.
   * **On success:**
@@ -194,7 +195,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
         }]
       }
       ```
-* `DELETE /:topic/:messageId` - Acknowledge a message as successfully processed and mark it for deletion.
+* `DELETE /topics/:topic/:messageId` - Acknowledge a message as successfully processed and mark it for deletion.
   * **On success:**
     * `200` Return final processing details of the message:
       ```javascript
@@ -218,7 +219,7 @@ If the queue does not hear back from the consumer after a specified delay, the m
       ```
   * **On failure:**
     * `404` Message is no longer in the queue. Consumers with delays longer than `processTimeout` may encounter this status code.
-
+* `GET /monitor` - Receive detailed status information for all topics. 
 ## Testing
 
 AwesomeQ includes a test suite built with [mocha](https://mochajs.org/) and configured to run with ES6.
