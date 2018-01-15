@@ -4,12 +4,12 @@
   "description": "",
   "main": "lib/server.js",
   "scripts": {
-    "build": "webpack --env dev && webpack --env build && npm run test",
+    "build": "export NODE_ENV=test && webpack --env dev && webpack --env build && npm run test",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --require babel-core/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
-    "test:watch:debug": "mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
-    "server": "node dist/awesomeq.js"
+    "test": "export NODE_ENV=test && mocha --require babel-core/register --colors ./test/*.spec.js",
+    "test:watch": "export NODE_ENV=test && mocha --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
+    "test:watch:debug": "export NODE_ENV=test && mocha --debug-brk --inspect --no-timeouts --require babel-core/register --colors -w --reporter spec ./test/*.spec.js",
+    "server": "export NODE_ENV=dev && node dist/awesomeq.js"
   },
   "author": "",
   "license": "ISC",
