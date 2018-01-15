@@ -164,7 +164,7 @@ describe('Topic', () => {
       });
     });
 
-    // context('when given a message that processed after a single faillure', () => {
+    // context('when given a message that processed after a single failure', () => {
     //   const topic = new Topic('whatever');
     //   const messageBody = 'foo';
     //   const message = topic.sendMessage(messageBody);
@@ -201,59 +201,40 @@ describe('Topic', () => {
     // });
   });
 
-  // describe('#requeueMessage()', () => {
-  //   context('when given a message that has already been tested AND can be retried', () => {
-  //     it('should add that message to the FRONT of the wait queue', () => {
-  //       // assert.equal(
-  //       //   messageSecondAttempt,
-  //       //   topic.messagesAwaitingProcessing._peek()
-  //       // );
-  //     });
-  //   });
-  //
-  //   context('when given a message that can no longer be retried', () => {
-  //     const topic = new Topic('whatever');
-  //     const message = new Message('foo');
-  //     message.processCounter = MAX_PROCESS_ATTEMPTS - 1;
-  //
-  //     // topic.sendMessage(message);
-  //     // topic.receiveMessage();
-  //     // topic.sendMessage(message);
-  //
-  //     it('should add that message to the unprocessableMessages array', () => {
-  //       assert.equal(0, topic.messagesAwaitingProcessing.length);
-  //       assert.equal(0, Object.keys(topic.messagesBeingProcessed).length);
-  //       assert.equal(1, topic.messagesUnprocessable.length);
-  //     });
-  //   });
-  //
-  //   context('when performed on the first processing of a message', () => {
-  //     it('should remove that message from the messagesBeingProcessed hash', () => {
-  //       assert.ok(false, 'UNIMPLEMENTED');
-  //     });
-  //
-  //     it('should increment the messagesProcessed statistic', () => {
-  //       assert.ok(false, 'UNIMPLEMENTED');
-  //     });
-  //
-  //     it('should adjust the averageProcessingTimeMS statistic', () => {
-  //       assert.ok(false, 'UNIMPLEMENTED');
-  //     });
-  //   });
-  //
-  //   context('when performed on the second processing of a message', () => {
-  //     it('should increment the singleFailures statistic', () => {
-  //       assert.ok(false, 'UNIMPLEMENTED');
-  //     });
-  //   });
-  //
-  //   context('when performed on the third+ processing of a message', () => {
-  //     it('should increment the multipleFailures statistic', () => {
-  //       assert.ok(false, 'UNIMPLEMENTED');
-  //     });
-  //   });
-  //
-  // });
+  describe('#requeueMessage()', () => {
+    context('when given a message that has already been tested AND can be retried', () => {
+      const topic = new Topic('whatever');
+      const messageBody = 'foo';
+      const message = topic.sendMessage(messageBody);
 
+      topic.receiveMessage();
+      topic.messagesBeingProcessed[message.id].processCounter = 1;
+      topic.requeueMessage(message.id);
+      it('should add that message to the FRONT of the wait queue', () => {
+        assert.equal(
+          message.id,
+          topic.messagesAwaitingProcessing._peek().id
+        );
+      });
+    });
+
+    context('when given a message that can no longer be retried', () => {
+      const topic = new Topic('whatever');
+      const messageBody = 'foo';
+      const message = topic.sendMessage(messageBody);
+
+      topic.receiveMessage();
+
+      topic.messagesBeingProcessed[message.id].processCounter = MAX_PROCESS_ATTEMPTS;
+
+      topic.requeueMessage(message.id);
+
+      it('should add that message to the unprocessableMessages array', () => {
+        assert.equal(0, topic.messagesAwaitingProcessing.length);
+        assert.equal(0, Object.keys(topic.messagesBeingProcessed).length);
+        assert.equal(1, topic.messagesUnprocessable.length);
+      });
+    });
+  });
 
 });

@@ -49,7 +49,7 @@ describe('Message', () => {
 
     context('with a message that HAS been processed', () => {
       const message = new Message('not fresh');
-      message._incrementProcessCount();
+      message.incrementProcessCount();
 
       it('returns false', () => {
         assert.ok(!message.isFresh());
@@ -67,8 +67,8 @@ describe('Message', () => {
 
     context('with a message with a few process attempts', () => {
       const message = new Message('fresh');
-      message._incrementProcessCount();
-      message._incrementProcessCount();
+      message.incrementProcessCount();
+      message.incrementProcessCount();
 
       it('should be true', () => {
         assert.ok(message.hasFailedAndCanBeReprocessed());
@@ -96,7 +96,7 @@ describe('Message', () => {
     context('with a message that CANNOT be processed again', () => {
       const message = new Message('yep its dead');
       for(let i = 0; i < 5; i++) {
-        message._incrementProcessCount();
+        message.incrementProcessCount();
       }
       it('returns false', () => {
         assert.ok(message.isUnprocessable());
