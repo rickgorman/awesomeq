@@ -1,7 +1,7 @@
 var assert = require('assert');
 
-import Database from '../lib/models/db';
-import Topic from '../lib/models/topic';
+import Database from '../../lib/models/db';
+import Topic from '../../lib/models/topic';
 
 describe('Database', function() {
   describe('#createTopic()', function() {

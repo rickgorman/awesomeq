@@ -1,7 +1,7 @@
 var assert = require('assert');
 
-import Message from '../lib/models/message';
-import { MAX_PROCESS_ATTEMPTS } from '../lib/models/message';
+import Message from '../../lib/models/message';
+import { MAX_PROCESS_ATTEMPTS } from '../../lib/models/message';
 
 describe('Message', () => {
   describe('#constructor()', () => {
