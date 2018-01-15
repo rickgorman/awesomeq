@@ -23,6 +23,7 @@ describe('Topic', () => {
         assert.equal(topic.statistics.singleFailures, 0);
         assert.equal(topic.statistics.multipleFailures, 0);
         assert.equal(topic.statistics.unprocessableMessages, 0);
+        assert.equal(topic.statistics.messagesProcessed, 0);
         assert.equal(topic.statistics.averageProcessingTimeMS, 0);
       });
 
@@ -98,7 +99,6 @@ describe('Topic', () => {
       });
 
       it('should return a JSONAPI-formatted representation of the message', () => {
-        debugger
         assert.deepStrictEqual(
           result,
           {
@@ -133,15 +133,24 @@ describe('Topic', () => {
 
   describe('#acknowledgeCompletion()', () => {
     context('when given an as-yet-unseen Message object', () => {
-      let topic = new Topic('whatever');
-      let messageBody = 'foo';
+      const topic = new Topic('whatever');
+      const messageBody = 'foo';
+      const message = new Message(messageBody);
 
-      it('should add that message to the BACK of the wait queue', () => {
-        const message = topic.sendMessage(messageBody);
-        assert.ok(topic.messagesAwaitingProcessing[message.id]);
+      const acknowledgedUnseenMessage = () => {
+        topic.acknowledgeCompletion(message);
+      };
+
+      it('should raise an error', () => {
+        assert.throws(acknowledgedUnseenMessage, Error);
       });
     });
 
+    context('when given a message that processed on its first try')
+
+  });
+
+  describe('#requeueMessage()', () => {
     context('when given a message that has already been tested AND can be retried', () => {
       it('should add that message to the FRONT of the wait queue', () => {
         // assert.equal(
@@ -192,6 +201,7 @@ describe('Topic', () => {
         assert.ok(false, 'UNIMPLEMENTED');
       });
     });
+
   });
 
 
