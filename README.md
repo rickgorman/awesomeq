@@ -236,11 +236,11 @@ To run the test suite, open a console and enter:
 
 ## Monitoring
 
+<img src="https://raw.githubusercontent.com/rickgorman/awesomeq/master/media/awesomeq-monitor-01.gif">
+
 Use the CLI tool to monitor the status of all topics:
 
 `# npm run monitor`
-
-[insert giphy here]
 
 ## Current Bottlenecks and Thoughts on Future Scaling
 
