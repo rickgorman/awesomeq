@@ -41,14 +41,15 @@ Requirements: a working [node.js](http://nodejs.org) environment, a console and 
     * `npm run build`
     * `npm run server`
 
-1. **Add some messages to the queue.** From a separate console:
+1. **Monitor all the things.** In another console, run:
+    * `npm run monitor`
+
+1. **Add some messages to the queue.** From a third console:
     * `npm run client-publisher`
 
-1. **Process some messages.** From yet a third console:
+1. **Process some messages.** From yet a fourth console:
     * `npm run client-consumer`
 
-1. **Monitor all the things.** In console numero 4, run:
-    * `npm run monitor`
 
 ## Overview
 
