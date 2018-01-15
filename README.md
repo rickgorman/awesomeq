@@ -113,12 +113,14 @@ If the queue does not hear back from the consumer after a specified delay, the m
             messagesInQueue: 14,
             messagesProcessed: 37,
             messagesBeingProcessed: 3,
-            singleFailures: 1,
-            multipleFailures: 0,
-            unprocessableMessages: 0,
-            averageProcessingTimeMS: 23,
             createdAt: "2018-01-13T03:24:00.000Z",
             processTimeout: 60000,
+            statistics: {
+              singleFailures: 1,
+              multipleFailures: 0,
+              unprocessableMessages: 0,
+              averageProcessingTimeMS: 23,              
+            }
           },
         }],
       }
@@ -235,19 +237,20 @@ Use the CLI tool to monitor the status of all topics:
 
 ## Current Bottlenecks and Thoughts on Future Scaling
 
-* How to meet high-volume requests
   * Where it would fail
+    * Eventually this single instance of node will become overwhelmed by the number of requests coming in per second. It will not be able to keep up with the HTTP request queue and will eventually run out of RAM and/or CPU.
   * What would be replaced
-  * What infrastructure / why
-    * spin up multiple instances of the node server and use one of the following strategies:
-      * round-robin
-      * load-balancer
-    * additionally:
-      * transition from in-memory data store to a fast persistent-storage system like DyanmoDB
-      * replace increment-by-one ids with GUIDs
-    * Implement websockets infrastructure
-      * to reduce HTTP overhead
-      * to automate retries by triggering when a client disconnects
+    * **Summary**
+      * The in-memory O(1) queue will need to be replaced by a persistent O(log n) data store.
+      * The single-instance node server will need to be replaced by a more scalable HTTP handler.
+    * **Server-side**
+      * [AWS Lambda](https://aws.amazon.com/lambda/). It has unlimited automatic scaling and pricing is very cost effective. The monthly fee for 1k requests per second with a memory footprint of 32MB/request is around $1900/mo.
+      * [AWS DynamoDB](https://aws.amazon.com/dynamodb). It has extreme read scalability and integrates well with Lambda. Pricing for 1k requests per second runs at $105/mo. Storage is negligible for our use case.
+      * This gives us a pricing estimate of $2000/mo. Similar AWS SQS pricing for 1k requests per second runs $1200/mo so we're well within a factor of 2 of an optimized AWS service offering. By bringing down the memory footprint of our node module, we may be able to reach SQS pricing parity.
+    * **Client-side**
+      * Implement websockets capability for clients. This has a couple of immediate benefits:
+        * Reduce HTTP overhead for clients that do continuous work.
+        * Automate retries by triggering when a client disconnects. For MIA clients this will immediately put their messages back in the ready queue.
 
 ## TODO
 * Implement more API methods:
