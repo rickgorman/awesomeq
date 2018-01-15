@@ -52,7 +52,6 @@ describe('Topics', () => {
     });
 
     context('with an ALREADY USED topic name', () => {
-
       it('should return 409 with errors array', (done) => {
         const topicName = 'dupe';
         global.db.createTopic(topicName);
@@ -73,7 +72,45 @@ describe('Topics', () => {
             done();
           });
       });
-
     });
   });
+
+  describe('GET /topics/:id', () => {
+    context('with a valid topic id', () => {
+      it('should GET the status of a specific topic', (done) => {
+        const topicName = 'awesome';
+        const topic = global.db.createTopic(topicName);
+
+        chai.request(server)
+          .get(`/topics/${topic.id}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            should.exist(res);
+            should.exist(res.body);
+            should.exist(res.body.data);
+            res.body.data.should.be.a('array');
+            res.body.data.length.should.be.eql(1);
+            done();
+          });
+      });
+    });
+
+    context('with an invalid topic id', () => {
+      it('should fail with a 404', (done) => {
+        chai.request(server)
+          .get(`/topics/${-1}`)
+          .end((err, res) => {
+            res.should.have.status(404);
+            should.exist(res);
+            should.exist(res.body);
+            should.exist(res.body.errors);
+            res.body.errors.should.be.a('array');
+            res.body.errors.length.should.be.eql(1);
+            done();
+          });
+
+      });
+    });
+  });
+
 });
