@@ -16,11 +16,6 @@ A fast in-memory message processing queue hosted by [express.js](http://expressj
 * Handles MIA clients via a configurable retry timeout
 * Push/Pop operations are always O(1)
 
-## Note to Some WONDERFUL Readers
-One spec of this project was overlooked: it should be based on a database whos logic is abstracted away. When this mistake was realized, there was not enough time left to refactor given the size of the test suite that would need to be rewritten.
-
-Instead, see [some notes](#current-bottlenecks-and-thoughts-on-future-scaling) on how this can be refactored in under a day.
-
 ## Contents
 1. [Quick Start](#quick-start)
 1. [Overview](#overview)
